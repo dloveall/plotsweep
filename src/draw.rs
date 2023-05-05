@@ -15,6 +15,7 @@ pub struct DrawSettings {
     pub power_max: f32,
     pub hide_axes: bool,
     pub ticks: usize,
+    pub label_size: u32,
 }
 
 pub fn colormaps() -> HashMap<&'static str, Gradient> {
@@ -81,6 +82,7 @@ pub fn draw_image(record_collection: &RecordCollection, output_path: &str, setti
             .x_desc("Frequency (MHz)")
             .x_label_formatter(&|&x| (x as f32/1e6).round().to_string())
             .x_labels(settings.ticks)
+            .label_style(("sans-serif", settings.label_size))
             .draw()?;
 
         chart.plotting_area().strip_coord_spec()

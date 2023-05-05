@@ -13,6 +13,7 @@ fn plot(matches: &ArgMatches) -> Result<(), Box<dyn Error>> {
     let power_max = value_t!(matches, "power-max", f32).unwrap_or_else(|e| e.exit());
     let colormap = matches.value_of("colormap").unwrap();
     let ticks = value_t!(matches, "ticks", usize).unwrap_or_else(|e| e.exit());
+    let label_size = value_t!(matches, "label-size", u32).unwrap_or_else(|e| e.exit());
 
     let rc = csv::load_records(input_path)?;
     let maps = draw::colormaps();
@@ -22,6 +23,7 @@ fn plot(matches: &ArgMatches) -> Result<(), Box<dyn Error>> {
         power_max,
         hide_axes: matches.is_present("hide_axes"),
         ticks,
+        label_size,
     };
     draw::draw_image(&rc, output_path, &settings)?;
     Ok(())
@@ -58,6 +60,11 @@ fn main() {
              .takes_value(true)
              .allow_hyphen_values(false)
              .default_value("10"))
+        .arg(Arg::with_name("label-size")
+             .long("label-size")
+             .takes_value(true)
+             .allow_hyphen_values(false)
+             .default_value("24"))
         .get_matches();
 
     if let Err(err) = plot(&matches) {
